@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="#">Portfolio</a>
+        <a href="#">Transactions</a>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Settlement Account & Graph -->
+        <div class="column">
+            <div class="header">Settlement Account Cash</div>
+            <p id="settlement-cash">$10,500</p>
+            
+             <!-- Bonds and Investments -->
+            <div class="header">Bonds & Investments</div>
+            <ul id="investments-list">
+                <li>Bond 1: $5000</li>
+                <li>Bond 2: $3000</li>
+                <li>Investment 1: $2000</li>
+            </ul>
+
+            
+        </div>
+
+       
+        <div class="column">
+            <!-- Line Chart (Net Worth) -->
+            <div class="graph-container">
+                <canvas id="netWorthChart"></canvas>
+            </div>
+
+            <!-- Stocks holdings -->
+            <div class="header">Stock Holdings</div>
+            <canvas id="stocksPieChart"></canvas>
+           
+        </div>
+
+        <!-- Stocks -->
+        <div class="column">
+            <div class="btn-container" style="margin-top: 20px;">
+                <button class="btn" id="addStockBtn">Add Stock</button>
+                <button class="btn" id="removeStockBtn">Remove Stock</button>
+            </div>
+            <div class="small-container" style="margin-top: 20px;">
+                <div class="header">Live Stock Values</div>
+                <p id="live-stock-values">AAPL: $145.00</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay and Popup for Add/Remove Stock -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <div class="header">Add/Remove Stock</div>
+        <select id="stockSelect">
+            <option value="AAPL">AAPL</option>
+            <option value="GOOG">GOOG</option>
+            <option value="TSLA">TSLA</option>
+        </select>
+        <input type="number" id="stockQuantity" placeholder="Quantity" />
+        <button class="btn" id="confirmStockAction">Confirm</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
