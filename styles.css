@@ -97,6 +97,7 @@ body {
     margin-left: 10px;
 }
 
+/* Overlay for pop-up */
 .overlay {
     display: none;
     position: fixed;
@@ -104,9 +105,70 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
     z-index: 999;
 }
+
+/* Popup box styling */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+    width: 300px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.popup h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.popup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup label {
+    margin-bottom: 5px;
+}
+
+.popup select, .popup input {
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.popup button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.popup button:hover {
+    background-color: #45a049;
+}
+
+#closePopupBtn {
+    margin-top: 10px;
+    background-color: #f44336;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+#closePopupBtn:hover {
+    background-color: #e53935;
+}
+
 
 #settlement-cash {
     margin: 20px;
@@ -117,6 +179,7 @@ body {
     background-color:  rgb(173, 172, 172);
     padding: 15px;
 }
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;

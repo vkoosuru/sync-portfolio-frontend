@@ -79,17 +79,27 @@
         </div>
     </div>
 
-    <!-- Overlay and Popup for Add/Remove Stock -->
-    <div class="overlay" id="overlay"></div>
-    <div class="popup" id="popup">
-        <div class="header">Add/Remove Stock</div>
-        <select id="stockSelect">
-            <option value="AAPL">AAPL</option>
-            <option value="GOOG">GOOG</option>
-            <option value="TSLA">TSLA</option>
-        </select>
-        <input type="number" id="stockQuantity" placeholder="Quantity" />
-        <button class="btn" id="confirmStockAction">Confirm</button>
+
+    <!-- Add/Remove Stock Modal -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Add/Remove Stock Popup -->
+    <div id="popup" class="popup">
+        <h2 id="popupTitle">Add/Remove Stock</h2>
+        <form id="stockForm">
+            <label for="stockSelect">Select Stock</label>
+            <select id="stockSelect" required>
+                <option value="AAPL">AAPL</option>
+                <option value="GOOG">GOOG</option>
+                <option value="TSLA">TSLA</option>
+            </select>
+
+            <label for="stockQuantity">Quantity</label>
+            <input type="number" id="stockQuantity" min="1" required>
+
+            <button type="button" id="confirmStockAction">Confirm</button>
+        </form>
+        <button id="closePopupBtn">Close</button>
     </div>
 
     <script src="script.js"></script>

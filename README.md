@@ -9,13 +9,14 @@ This is a simple stock portfolio management web application that allows users to
 - **Investments and Bonds**: Lists the user's investments and bonds (currently static).
 - **Stock Holdings**: Displays stock holdings with a pie chart showing the total stocks in the portfolio.
 - **Net Worth Graph**: A line graph showing the change in net worth over time.
-- **Add and Remove Stocks**: Functionality to add or remove stocks from the portfolio. (need to work on this) 
+- **Add and Remove Stocks**: Functionality to add or remove stocks from the portfolio. 
 - **Transaction History**: View a table of previous stock transactions, including the stock ticker, quantity, price, and action (buy/sell).
 
 ## To Do
-- **Add/Remove Stock**: This feature is working, but the integration with a real stock API to get the live stock prices is still to be done.
-  - **Add Stock**: Allows users to increase their stock holdings by specifying the stock symbol and quantity.
-  - **Remove Stock**: Allows users to decrease their stock holdings by specifying the stock symbol and quantity (if they have enough of the stock).
+- connect frontend to the backend using API (fetching the endpoints using JS)
+- creating good endpoints in the URL so that the stock holder doesnt get confused 
+- Implement real-time stock price updates.
+- create a holding pop up for stocks so that the user can check the real stock details of his in a single table
 
 
 ## Requirements

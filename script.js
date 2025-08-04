@@ -144,63 +144,76 @@ function togglePopup() {
     popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
 }
 
-// Function to handle adding/removing stocks
+// Event listener for Add Stock button
 document.getElementById('addStockBtn').addEventListener('click', () => {
-    togglePopup();
+    document.getElementById('popupTitle').innerText = 'Add Stock';  // Set popup title
+    document.getElementById('confirmStockAction').dataset.action = 'add';  // Set action type for button
+    togglePopup();  // Show the popup
 });
 
+// Event listener for Remove Stock button
 document.getElementById('removeStockBtn').addEventListener('click', () => {
-    togglePopup();
+    document.getElementById('popupTitle').innerText = 'Remove Stock';  // Set popup title
+    document.getElementById('confirmStockAction').dataset.action = 'remove';  // Set action type for button
+    togglePopup();  // Show the popup
+});
+
+// Event listener for closing the pop-up
+document.getElementById('closePopupBtn').addEventListener('click', () => {
+    togglePopup();  // Hide the popup when the "Close" button is clicked
 });
 
 // Event listener for confirming the Add/Remove Stock action
 document.getElementById('confirmStockAction').addEventListener('click', () => {
+    const action = document.getElementById('confirmStockAction').dataset.action;
     const stock = document.getElementById('stockSelect').value;
     const quantity = parseInt(document.getElementById('stockQuantity').value);
 
     if (!isNaN(quantity) && quantity > 0) {
-        // If action is "Add Stock"
-        if (document.getElementById('addStockBtn').style.display === 'block') {
+        if (action === 'add') {
+            // Add stock
             stockData[stock] = stockData[stock] + quantity;
 
-            // Create new transaction record
+            // Record the transaction
             transactions.push({
-                tickerId: `${stock}${Date.now()}`, // Generate unique ticker ID
+                tickerId: `${stock}${Date.now()}`,  // Generate unique ID for each transaction
                 ticker: stock,
                 quantity: quantity,
                 timestamp: new Date().toLocaleString(),
-                buyPrice: 145, // Placeholder buy price, can be replaced with real-time data
+                buyPrice: 145,  // Placeholder price
                 totalPrice: 145 * quantity,
                 action: 'buy'
             });
-        } else if (document.getElementById('removeStockBtn').style.display === 'block') {
+        } else if (action === 'remove') {
+            // Remove stock (check if enough stock is available)
             if (stockData[stock] >= quantity) {
                 stockData[stock] = stockData[stock] - quantity;
 
-                // Create new transaction record for sale
+                // Record the transaction
                 transactions.push({
-                    tickerId: `${stock}${Date.now()}`, // Generate unique ticker ID
+                    tickerId: `${stock}${Date.now()}`,  // Generate unique ID for each transaction
                     ticker: stock,
                     quantity: quantity,
                     timestamp: new Date().toLocaleString(),
-                    buyPrice: 145, // Placeholder buy price, can be replaced with real-time data
+                    buyPrice: 145,  // Placeholder price
                     totalPrice: 145 * quantity,
                     action: 'sell'
                 });
             } else {
-                alert("You do not have enough stock to sell.");
+                alert('You do not have enough stock to remove!');
                 return;
             }
         }
 
-        // Update the charts and cash details
+        // Update the charts and cash details after action
         updateStocksPieChart();
         updateCash();
-        togglePopup();
+        togglePopup();  // Hide the popup
     } else {
-        alert("Please enter a valid quantity.");
+        alert('Please enter a valid quantity.');
     }
 });
+
 
 // Initializing charts and data
 updateNetWorthGraph();
