@@ -6,7 +6,37 @@ const stockData = {
 };
 
 const netWorthData = [10500, 10700, 10650, 10900, 11050]; // Dummy net worth values for graph
-let currentNetWorthIndex = 0;
+
+// Dummy transactions data
+const transactions = [
+    {
+        tickerId: 'AAPL123',
+        ticker: 'AAPL',
+        quantity: 10,
+        timestamp: '2023-08-01 10:00:00',
+        buyPrice: 140,
+        totalPrice: 1400,
+        action: 'buy'
+    },
+    {
+        tickerId: 'GOOG456',
+        ticker: 'GOOG',
+        quantity: 5,
+        timestamp: '2023-08-05 15:30:00',
+        buyPrice: 2700,
+        totalPrice: 13500,
+        action: 'buy'
+    },
+    {
+        tickerId: 'TSLA789',
+        ticker: 'TSLA',
+        quantity: 2,
+        timestamp: '2023-08-07 09:45:00',
+        buyPrice: 650,
+        totalPrice: 1300,
+        action: 'buy'
+    }
+];
 
 // Function to update cash details
 function updateCash() {
@@ -48,7 +78,65 @@ function updateNetWorthGraph() {
     });
 }
 
-// Toggle popup visibility
+// Function to toggle the visibility of the transaction history modal
+function toggleTransactionPopup() {
+    const overlay = document.getElementById('overlay');
+    const popup = document.getElementById('transactionPopup');
+    overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+    popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+}
+
+// Function to display the transaction history in the modal
+function showTransactions() {
+    const transactionTable = document.getElementById('transactionTable').getElementsByTagName('tbody')[0];
+    transactionTable.innerHTML = ''; // Clear previous table entries
+
+    transactions.forEach(transaction => {
+        const row = document.createElement('tr');
+
+        const tickerIdCell = document.createElement('td');
+        tickerIdCell.innerText = transaction.tickerId;
+        row.appendChild(tickerIdCell);
+
+        const tickerCell = document.createElement('td');
+        tickerCell.innerText = transaction.ticker;
+        row.appendChild(tickerCell);
+
+        const quantityCell = document.createElement('td');
+        quantityCell.innerText = transaction.quantity;
+        row.appendChild(quantityCell);
+
+        const timestampCell = document.createElement('td');
+        timestampCell.innerText = transaction.timestamp;
+        row.appendChild(timestampCell);
+
+        const buyPriceCell = document.createElement('td');
+        buyPriceCell.innerText = `$${transaction.buyPrice}`;
+        row.appendChild(buyPriceCell);
+
+        const totalPriceCell = document.createElement('td');
+        totalPriceCell.innerText = `$${transaction.totalPrice}`;
+        row.appendChild(totalPriceCell);
+
+        const actionCell = document.createElement('td');
+        actionCell.innerText = transaction.action.charAt(0).toUpperCase() + transaction.action.slice(1); // Capitalize "buy" or "sell"
+        row.appendChild(actionCell);
+
+        transactionTable.appendChild(row);
+    });
+}
+
+// Event listeners for the modal
+document.getElementById('transactionsLink').addEventListener('click', () => {
+    toggleTransactionPopup();
+    showTransactions();
+});
+
+document.getElementById('closeTransactionBtn').addEventListener('click', () => {
+    toggleTransactionPopup();
+});
+
+// Function to toggle the visibility of the Add/Remove Stock pop-up
 function togglePopup() {
     const overlay = document.getElementById('overlay');
     const popup = document.getElementById('popup');
@@ -56,24 +144,61 @@ function togglePopup() {
     popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
 }
 
-// Handle Add/Remove Stock
+// Function to handle adding/removing stocks
 document.getElementById('addStockBtn').addEventListener('click', () => {
     togglePopup();
 });
+
 document.getElementById('removeStockBtn').addEventListener('click', () => {
     togglePopup();
 });
 
+// Event listener for confirming the Add/Remove Stock action
 document.getElementById('confirmStockAction').addEventListener('click', () => {
     const stock = document.getElementById('stockSelect').value;
     const quantity = parseInt(document.getElementById('stockQuantity').value);
+
     if (!isNaN(quantity) && quantity > 0) {
-        stockData[stock] += quantity;
+        // If action is "Add Stock"
+        if (document.getElementById('addStockBtn').style.display === 'block') {
+            stockData[stock] = stockData[stock] + quantity;
+
+            // Create new transaction record
+            transactions.push({
+                tickerId: `${stock}${Date.now()}`, // Generate unique ticker ID
+                ticker: stock,
+                quantity: quantity,
+                timestamp: new Date().toLocaleString(),
+                buyPrice: 145, // Placeholder buy price, can be replaced with real-time data
+                totalPrice: 145 * quantity,
+                action: 'buy'
+            });
+        } else if (document.getElementById('removeStockBtn').style.display === 'block') {
+            if (stockData[stock] >= quantity) {
+                stockData[stock] = stockData[stock] - quantity;
+
+                // Create new transaction record for sale
+                transactions.push({
+                    tickerId: `${stock}${Date.now()}`, // Generate unique ticker ID
+                    ticker: stock,
+                    quantity: quantity,
+                    timestamp: new Date().toLocaleString(),
+                    buyPrice: 145, // Placeholder buy price, can be replaced with real-time data
+                    totalPrice: 145 * quantity,
+                    action: 'sell'
+                });
+            } else {
+                alert("You do not have enough stock to sell.");
+                return;
+            }
+        }
+
+        // Update the charts and cash details
         updateStocksPieChart();
         updateCash();
         togglePopup();
     } else {
-        alert("Please enter a valid quantity");
+        alert("Please enter a valid quantity.");
     }
 });
 

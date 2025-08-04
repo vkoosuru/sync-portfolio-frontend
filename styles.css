@@ -17,6 +17,7 @@ body {
     color: white;
     text-decoration: none;
     margin: 0 15px;
+    cursor: pointer;
 }
 
 .container {
@@ -36,7 +37,7 @@ body {
 
 .header {
     font-size: 24px;
-    margin-bottom: 10px;
+    margin: 15px;
 }
 
 .btn {
@@ -54,16 +55,17 @@ body {
 
 .graph-container {
     position: relative;
-    height: 250px;
+    height: 150px; /* Reduced size */
 }
 
-/* Chart container styles */
-.chart-container {
-    position: relative;
-    height: 300px;
+#stocksPieChart {
+    width: 300px !important;
+    height: 300px !important;
+    margin: 0 auto;
 }
 
-.popup {
+/* Transaction Popup Styles */
+#transactionPopup {
     display: none;
     position: fixed;
     top: 50%;
@@ -74,12 +76,25 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    width: 80%;
+    max-width: 1000px;
 }
 
-.popup input {
-    margin: 10px;
-    padding: 10px;
-    width: 80%;
+#transactionPopup table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#transactionPopup th, #transactionPopup td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+#closeTransactionBtn {
+    margin-top: 20px;
+    margin-left: 10px;
 }
 
 .overlay {
@@ -93,6 +108,15 @@ body {
     z-index: 999;
 }
 
+#settlement-cash {
+    margin: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    background-color:  rgb(173, 172, 172);
+    padding: 15px;
+}
 @media (max-width: 768px) {
     .container {
         flex-direction: column;

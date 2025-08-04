@@ -13,43 +13,61 @@
 
     <!-- Navbar -->
     <div class="navbar">
-        <a href="#">Portfolio</a>
-        <a href="#">Transactions</a>
+        <a href="#" id="portfolioLink">Portfolio</a>
+        <a href="#" id="transactionsLink">Transactions</a>
     </div>
 
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Settlement Account & Graph -->
+    <!-- Transaction Modal -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="transactionPopup">
+        <div class="header">Transaction History</div>
+        <table id="transactionTable">
+            <thead>
+                <tr>
+                    <th>Ticker ID</th>
+                    <th>Ticker</th>
+                    <th>Quantity</th>
+                    <th>Timestamp</th>
+                    <th>Buying Price</th>
+                    <th>Total Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Transactions will be added here dynamically -->
+            </tbody>
+        </table>
+        <button class="btn" id="closeTransactionBtn">Close</button>
+    </div>
+
+    <!-- Main Container (Portfolio section) -->
+    <div class="container" id="portfolioContainer">
         <div class="column">
             <div class="header">Settlement Account Cash</div>
             <p id="settlement-cash">$10,500</p>
-            
-             <!-- Bonds and Investments -->
+            <hr />
             <div class="header">Bonds & Investments</div>
+            
             <ul id="investments-list">
                 <li>Bond 1: $5000</li>
                 <li>Bond 2: $3000</li>
                 <li>Investment 1: $2000</li>
             </ul>
-
-            
         </div>
 
-       
         <div class="column">
+
             <!-- Line Chart (Net Worth) -->
             <div class="graph-container">
                 <canvas id="netWorthChart"></canvas>
             </div>
-
-            <!-- Stocks holdings -->
+            <hr />
             <div class="header">Stock Holdings</div>
             <canvas id="stocksPieChart"></canvas>
-           
         </div>
 
-        <!-- Stocks -->
         <div class="column">
+            <div class="header"> Add or remove stocks</div>
             <div class="btn-container" style="margin-top: 20px;">
                 <button class="btn" id="addStockBtn">Add Stock</button>
                 <button class="btn" id="removeStockBtn">Remove Stock</button>
