@@ -1,9 +1,14 @@
 // Dummy data
 const stockData = {
-    AAPL: 50,
-    GOOG: 30,
-    TSLA: 10
+    C: 20,
+    AMZN: 15,
+    TSLA: 10,
+    FB: 25,
+    AAPL: 30
 };
+
+
+let pieChart = null;  // Global variable to store the chart instance
 
 const netWorthData = [10500, 10700, 10650, 10900, 11050]; // Dummy net worth values for graph
 
@@ -38,6 +43,41 @@ const transactions = [
     }
 ];
 
+function updateNetWorthGraph() {
+    var options = {
+        chart: {
+            type: 'line',
+            height: 350
+        },
+        series: [{
+            name: "Net Worth",
+            data: netWorthData
+        }],
+        xaxis: {
+            categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
+        },
+        title: {
+            text: 'Net Worth Over Time',
+            align: 'left'
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        colors: ['#00bcd4'],
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return "$" + val;
+                }
+            }
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#netWorthChart"), options);
+    chart.render();
+}
+
+
 // Function to update cash details
 function updateCash() {
     document.getElementById("settlement-cash").innerText = `$${stockData.AAPL * 145 + stockData.GOOG * 2700 + stockData.TSLA * 650}`;
@@ -45,38 +85,40 @@ function updateCash() {
 
 // Function to update the stocks chart
 function updateStocksPieChart() {
-    const ctx = document.getElementById('stocksPieChart').getContext('2d');
+    const series = Object.values(stockData);
     const labels = Object.keys(stockData);
-    const data = Object.values(stockData);
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
+
+    if (pieChart) {
+        pieChart.updateSeries(series);
+        pieChart.updateOptions({ labels: labels });
+    } else {
+        const options = {
+            chart: {
+                type: 'pie',
+                height: 450  // Increased from 350
+            },
+            series: series,
             labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: ['#FF9999', '#66B2FF', '#FFCC00'],
-            }]
-        }
-    });
+            title: {
+                text: 'Stock Holdings Distribution',
+                align: 'center'
+            },
+            colors: ['#FF9999', '#66B2FF', '#FFCC00', '#8BC34A', '#FF5722'],
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + ' shares';
+                    }
+                }
+            }
+        };
+
+        pieChart = new ApexCharts(document.querySelector("#stocksPieChart"), options);
+        pieChart.render();
+    }
 }
 
-// Function to update the net worth graph
-function updateNetWorthGraph() {
-    const ctx = document.getElementById('netWorthChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
-            datasets: [{
-                label: 'Net Worth',
-                data: netWorthData,
-                borderColor: '#00bcd4',
-                fill: false,
-                tension: 0.1
-            }]
-        }
-    });
-}
+
 
 // Function to toggle the visibility of the transaction history modal
 function toggleTransactionPopup() {
