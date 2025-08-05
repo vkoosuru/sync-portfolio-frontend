@@ -1,219 +1,269 @@
-/* Basic styles for layout */
+/* ==== GLOBAL STYLES ==== */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Segoe UI', Roboto, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f7fc;
-}
-
-.navbar {
-    background-color: #1d2a3b;
-    padding: 15px;
+    background-color: #f0f2f5;
+    color: #333;
+  }
+  
+  .navbar {
+    background-color: #1f2d3d;
     color: white;
-    text-align: center;
-}
-
-.navbar a {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 16px;
+  }
+  
+  .navbar a {
     color: white;
     text-decoration: none;
-    margin: 0 15px;
+    font-size: 18px;
+    font-weight: 500;
     cursor: pointer;
-}
-
-/* Container holding the columns */
-.container {
+  }
+  
+  .navbar a:hover {
+    text-decoration: underline;
+  }
+  
+  .page {
+    display: none;
+    height: calc(100vh - 64px);
+  }
+  
+  .dashboard {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
     padding: 20px;
-    justify-content: space-between;
-}
-
-/* Style for each column */
-.column {
-    flex: 1 1 300px;
-    margin: 15px;
+    gap: 20px;
+    box-sizing: border-box;
+    height: 100%;
+  }
+  
+  /* ==== COLUMNS ==== */
+  .column-left {
+    width: 33%;
     background: white;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Header style */
-.header {
-    font-size: 24px;
-    margin: 15px 0;
-}
-
-/* Button styling */
-.btn {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #218838;
-}
-
-/* Styling for the graph containers */
-.graph-container {
-    position: relative;
-    height: 350px; /* Increased height for line chart */
-    margin-bottom: 20px;
-}
-
-/* Pie chart styling */
-#stocksPieChart {
-    width: 250px !important;  /* Reduced size */
-    height: 250px !important; /* Reduced size */
-    margin: 0 auto;
-}
-
-/* Transaction Popup Styles */
-#transactionPopup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+  }
+  
+  .column-right {
+    width: 67%;
+    background: white;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    width: 80%;
-    max-width: 1000px;
-}
-
-#transactionPopup table {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    overflow-y: auto;
+  }
+  
+  /* ==== HEADERS & TEXT ==== */
+  .header {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #settlement-cash {
+    background: #e1f5e8;
+    font-size: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  ul#investments-list {
+    list-style-type: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  ul#investments-list li {
+    background: #f5f7fa;
+    border: 1px solid #d0d7de;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: 0.3s;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  
+  ul#investments-list li:hover {
+    background-color: #e2e6eb;
+  }
+  
+  /* ==== GRAPHS ==== */
+  .graph-container {
+    height: 350px;
+  }
+  
+  #stocksPieChart {
+    width: 100%;
+    height: 260px;
+  }
+ 
+  /* ==== TRANSACTIONS ==== */
+  #transactions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  /* ==== TABLES ==== */
+  table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-}
-
-#transactionPopup th, #transactionPopup td {
-    padding: 8px;
+    font-size: 15px;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  th, td {
+    padding: 12px;
     text-align: center;
-    border: 1px solid #ddd;
-}
-
-#closeTransactionBtn {
-    margin-top: 20px;
-    margin-left: 10px;
-}
-
-#stocksPieChart {
-    width: 400px !important;  /* Increased size */
-    height: 400px !important;
-    margin: 0 auto;
-}
-
-/* Overlay for pop-up */
-.overlay {
-    display: none;
+    border-bottom: 1px solid #eee;
+  }
+  
+  th {
+    background: #f8f9fa;
+    font-weight: 600;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* ==== LIVE PRICES ==== */
+  .live-prices div {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+  
+  /* ==== POPUPS & MODALS ==== */
+  .overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
     z-index: 999;
-}
-
-/* Popup box styling for Add/Remove stock */
-.popup {
+    display: none;
+  }
+  
+  .popup {
     display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: #fff;
+    background: white;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     z-index: 1000;
-    width: 300px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.popup h2 {
+    width: 320px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .popup h2 {
     text-align: center;
-    margin-bottom: 15px;
-}
-
-.popup form {
+    margin-bottom: 20px;
+  }
+  
+  .popup form {
     display: flex;
     flex-direction: column;
-}
-
-.popup label {
+  }
+  
+  .popup label {
     margin-bottom: 5px;
-}
-
-.popup select, .popup input {
+  }
+  
+  .popup select,
+  .popup input {
     padding: 10px;
     margin-bottom: 15px;
     font-size: 16px;
-}
-
-.popup button {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .popup button {
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: #28a745;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
-}
-
-.popup button:hover {
-    background-color: #45a049;
-}
-
-#closePopupBtn {
+    border-radius: 6px;
     margin-top: 10px;
-    background-color: #f44336;
+  }
+  
+  .popup button:hover {
+    background-color: #218838;
+  }
+  
+  #closePopupBtn {
+    background-color: #dc3545;
+  }
+  
+  #closePopupBtn:hover {
+    background-color: #c82333;
+  }
+  
+  /* ==== BUTTONS ==== */
+  .btn-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    padding: 8px 16px;
+    border-radius: 6px;
     cursor: pointer;
-}
-
-#closePopupBtn:hover {
-    background-color: #e53935;
-}
-
-/* Styling for settlement cash section */
-#settlement-cash {
-    margin: 20px;
-    border-radius: 10px;
-    text-align: center;
-    font-size: large;
-    font-weight: bold;
-    background-color: rgb(173, 172, 172);
-    padding: 15px;
-}
-
-/* Media Queries for responsiveness */
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        align-items: center;
+    font-size: 16px;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* ==== RESPONSIVE ==== */
+  @media (max-width: 900px) {
+    .dashboard {
+      flex-direction: column;
+      height: auto;
     }
-
-    .column {
-        margin: 10px;
-        width: 100%;
+    .column-left,
+    .column-right {
+      width: 100%;
     }
-
-    /* Adjust pie chart and line chart height for small screens */
-    .graph-container {
-        height: 250px;
-    }
-
-    #stocksPieChart {
-        width: 200px !important;
-        height: 200px !important;
-    }
-}
-
+  }
