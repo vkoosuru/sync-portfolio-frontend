@@ -95,7 +95,6 @@ body {
   }
   
   ul#investments-list li {
-    background: #f5f7fa;
     border: 1px solid #d0d7de;
     padding: 10px 12px;
     border-radius: 6px;
@@ -103,10 +102,28 @@ body {
     transition: 0.3s;
     cursor: pointer;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  ul#investments-list li:nth-child(odd) {
+    background: #f5f7fa;
+  }
+  
+  ul#investments-list li:nth-child(even) {
+    background: #e6f3ff;
   }
   
   ul#investments-list li:hover {
     background-color: #e2e6eb;
+  }
+  
+  .delete-btn {
+    color: #dc3545;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 10px;
   }
   
   /* ==== GRAPHS ==== */
@@ -118,30 +135,37 @@ body {
     width: 100%;
     height: 260px;
   }
- 
+  
   /* ==== TRANSACTIONS ==== */
   #transactions {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    justify-content: center;
     align-items: center;
+    width: 100%;
+  }
+  
+  .transactions-container {
+    width: 80vw;
+    max-width: 1200px;
+  }
+  
+  #transactionTable {
+    width: 100%;
+    margin: 0 auto;
   }
   
   /* ==== TABLES ==== */
   table {
-    width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 10px;
     font-size: 15px;
     background: #ffffff;
     border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
   }
   
   th, td {
     padding: 12px;
     text-align: center;
-    border-bottom: 1px solid #eee;
   }
   
   th {
@@ -149,14 +173,59 @@ body {
     font-weight: 600;
   }
   
-  tr:hover {
+  tr.buy-row {
+    background-color: #e1f5e8;
+    border-radius: 8px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  tr.sell-row {
+    background-color: #ffe6e6;
+    border-radius: 8px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  tr.buy-row:hover, tr.sell-row:hover {
     background-color: #f1f1f1;
   }
   
   /* ==== LIVE PRICES ==== */
-  .live-prices div {
-    margin-bottom: 8px;
-    font-size: 16px;
+  .live-prices {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .live-price-item {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .live-price-item:hover {
+    background: #f8f9fa;
+  }
+  
+  .ticker {
+    font-weight: 600;
+  }
+  
+  .price {
+    font-weight: 500;
+  }
+  
+  .change {
+    background: #f5f7fa;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 14px;
   }
   
   /* ==== POPUPS & MODALS ==== */
@@ -183,6 +252,11 @@ body {
     z-index: 1000;
     width: 320px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .stock-details-popup {
+    width: 500px;
+    max-width: 90vw;
   }
   
   .popup h2 {
@@ -223,12 +297,43 @@ body {
     background-color: #218838;
   }
   
-  #closePopupBtn {
+  #closePopupBtn, #closeStockDetailsBtn {
     background-color: #dc3545;
   }
   
-  #closePopupBtn:hover {
+  #closePopupBtn:hover, #closeStockDetailsBtn:hover {
     background-color: #c82333;
+  }
+  
+  .stock-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .stock-chart {
+    height: 200px;
+  }
+  
+  .open-price {
+    color: #007bff;
+    font-weight: 500;
+  }
+  
+  .close-price {
+    color: #6f42c1;
+    font-weight: 500;
+  }
+  
+  .high-price {
+    color: #28a745;
+    font-weight: 500;
+  }
+  
+  .low-price {
+    color: #dc3545;
+    font-weight: 500;
   }
   
   /* ==== BUTTONS ==== */
@@ -256,6 +361,11 @@ body {
     background-color: #0056b3;
   }
   
+  .btn-small {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  
   /* ==== RESPONSIVE ==== */
   @media (max-width: 900px) {
     .dashboard {
@@ -265,5 +375,8 @@ body {
     .column-left,
     .column-right {
       width: 100%;
+    }
+    .transactions-container {
+      width: 90vw;
     }
   }

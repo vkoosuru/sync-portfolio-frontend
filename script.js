@@ -1,4 +1,3 @@
-// ==== GLOBAL STATE ====
 const stockData = {
     C: 20,
     AMZN: 15,
@@ -9,40 +8,63 @@ const stockData = {
   
   const transactions = [];
   const investments = [
-    'Bond 1: $5000',
-    'Bond 2: $3000',
-    'Investment 1: $2000'
+    { name: 'Bond 1: $5000', amount: 5000 },
+    { name: 'Bond 2: $3000', amount: 3000 },
+    { name: 'Investment 1: $2000', amount: 2000 }
   ];
   
-  let pieChart = null;
   const livePrices = {};
   const previousPrices = {};
-  const API_BASE = "https://c4rm9elh30.execute-api.us-east-1.amazonaws.com/default/cachedPriceData?ticker=";
+  const priceHistory = {}; // Store last 10 prices for each ticker
   const tickers = Object.keys(stockData);
+  let stockPriceCharts = {};
   
+  let pieChart = null;
+  let netWorthChartInstance = null;
+  let netWorthHistory = [10500];
+  let netWorthTimestamps = [new Date().toLocaleString()];
   
-  // ==== PAGE SWITCHING ====
   function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
     document.getElementById(id).style.display = 'flex';
   }
   
-  
-  // ==== CHARTS ====
   function updateNetWorthGraph() {
+    if (netWorthHistory.length > 20) {
+      netWorthHistory.shift();
+      netWorthTimestamps.shift();
+    }
+  
     const options = {
       chart: { type: 'line', height: 350 },
-      series: [{ name: "Net Worth", data: [10500, 10700, 10650, 10900, 11050] }],
-      xaxis: { categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'] },
+      series: [{ name: "Net Worth", data: netWorthHistory }],
+      xaxis: { 
+        categories: netWorthTimestamps,
+        labels: {
+          rotate: -45,
+          formatter: function(value) {
+            return new Date(value).toLocaleTimeString();
+          }
+        }
+      },
       title: { text: 'Net Worth Over Time', align: 'left' },
       stroke: { curve: 'smooth' },
       colors: ['#00bcd4'],
       tooltip: {
-        y: { formatter: val => "$" + val }
+        y: { formatter: val => "$" + val },
+        x: { formatter: val => new Date(val).toLocaleString() }
       }
     };
-    const chart = new ApexCharts(document.querySelector("#netWorthChart"), options);
-    chart.render();
+    
+    if (netWorthChartInstance) {
+      netWorthChartInstance.updateOptions({
+        xaxis: { categories: netWorthTimestamps },
+        series: [{ name: "Net Worth", data: netWorthHistory }]
+      });
+    } else {
+      netWorthChartInstance = new ApexCharts(document.querySelector("#netWorthChart"), options);
+      netWorthChartInstance.render();
+    }
   }
   
   function updateStocksPieChart() {
@@ -54,7 +76,7 @@ const stockData = {
       pieChart.updateOptions({ labels });
     } else {
       const options = {
-        chart: { type: 'pie', height: 450 },
+        chart: { type: 'pie', height: 260 },
         series,
         labels,
         title: { text: 'Stock Holdings Distribution', align: 'center' },
@@ -68,14 +90,27 @@ const stockData = {
     }
   }
   
-  
-  // ==== CASH + HOLDINGS ====
   function updateCash() {
-    const value = Object.entries(stockData).reduce((sum, [ticker, qty]) => {
+    const stockValue = Object.entries(stockData).reduce((sum, [ticker, qty]) => {
       const price = livePrices[ticker] || 100;
       return sum + price * qty;
     }, 0);
-    document.getElementById("settlement-cash").innerText = `$${value.toFixed(2)}`;
+  
+    const investmentValue = investments.reduce((sum, inv) => sum + inv.amount, 0);
+    const totalValue = stockValue + investmentValue;
+  
+    const roundedValue = parseFloat(totalValue.toFixed(2));
+    document.getElementById("settlement-cash").innerText = `$${roundedValue}`;
+  
+    netWorthTimestamps.push(new Date().toLocaleString());
+    netWorthHistory.push(roundedValue);
+  
+    if (netWorthHistory.length > 20) {
+      netWorthHistory.shift();
+      netWorthTimestamps.shift();
+    }
+  
+    updateNetWorthGraph();
   }
   
   function updateHoldingsTable() {
@@ -83,8 +118,17 @@ const stockData = {
     tableBody.innerHTML = "";
     Object.entries(stockData).forEach(([ticker, qty]) => {
       const price = livePrices[ticker]?.toFixed(2) || '-';
+      const prevPrice = previousPrices[ticker] || price;
+      const diff = price - prevPrice;
+      const color = diff > 0 ? 'green' : diff < 0 ? 'red' : 'black';
+      const symbol = diff > 0 ? '↑' : diff < 0 ? '↓' : '';
+      
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${ticker}</td><td>${qty}</td><td>$${price}</td>`;
+      row.innerHTML = `
+        <td>${ticker}</td>
+        <td>${qty}</td>
+        <td style="color:${color};">$${price} ${symbol}</td>
+      `;
       tableBody.appendChild(row);
     });
   }
@@ -94,74 +138,150 @@ const stockData = {
     table.innerHTML = '';
     transactions.forEach(tr => {
       const row = document.createElement('tr');
+      row.className = tr.action === 'Buy' ? 'buy-row' : 'sell-row';
       row.innerHTML = `
         <td>${tr.tickerId}</td>
         <td>${tr.ticker}</td>
         <td>${tr.quantity}</td>
         <td>${tr.timestamp}</td>
         <td>$${tr.buyPrice}</td>
-        <td>$${tr.totalPrice}</td>
+        <td>$${tr.totalPrice.toFixed(2)}</td>
         <td>${tr.action}</td>
       `;
       table.appendChild(row);
     });
   }
   
-  
-  // ==== LIVE PRICES ====
-  async function fetchLivePrices() {
+  function generateInitialPrices() {
     for (const ticker of tickers) {
-      try {
-        const res = await fetch(API_BASE + ticker);
-        const data = await res.json();
-        const currentPrice = parseFloat(data.price);
+      const randomPrice = parseFloat((Math.random() * 100 + 50).toFixed(2));
+      livePrices[ticker] = randomPrice;
+      previousPrices[ticker] = randomPrice;
+      priceHistory[ticker] = Array(10).fill(randomPrice).map((price, i) => ({
+        time: new Date(Date.now() - (9-i) * 3600000).toLocaleTimeString(),
+        price: parseFloat(price.toFixed(2))
+      }));
+    }
+    renderLivePrices();
+    updateCash();
+  }
   
-        const change = (Math.random() * 2 - 1).toFixed(2);
-        const simulated = parseFloat((currentPrice + parseFloat(change)).toFixed(2));
+  function simulateLivePrices() {
+    for (const ticker of tickers) {
+      const oldPrice = livePrices[ticker];
+      const randomChange = (Math.random() * 0.5 - 0.25).toFixed(2);
+      const newPrice = parseFloat((oldPrice + parseFloat(randomChange)).toFixed(2));
   
-        previousPrices[ticker] = livePrices[ticker] || simulated;
-        livePrices[ticker] = simulated;
-      } catch (e) {
-        console.error(`Error fetching price for ${ticker}`, e);
+      previousPrices[ticker] = oldPrice;
+      livePrices[ticker] = newPrice;
+  
+      // Update price history
+      if (!priceHistory[ticker]) {
+        priceHistory[ticker] = [];
+      }
+      priceHistory[ticker].push({
+        time: new Date().toLocaleTimeString(),
+        price: newPrice
+      });
+      if (priceHistory[ticker].length > 10) {
+        priceHistory[ticker].shift();
       }
     }
+  
     renderLivePrices();
     updateCash();
     updateHoldingsTable();
   }
   
+  function generateDummyStockData(ticker) {
+    const history = priceHistory[ticker] || Array(10).fill({
+      time: new Date().toLocaleTimeString(),
+      price: livePrices[ticker] || 100
+    });
+  
+    const prices = history.map(p => p.price);
+    const open = parseFloat(prices[0].toFixed(2)); // First price
+    const close = parseFloat(prices[prices.length - 1].toFixed(2)); // Last price (current)
+    const high = parseFloat(Math.max(...prices).toFixed(2));
+    const low = parseFloat(Math.min(...prices).toFixed(2));
+  
+    return { open, close, high, low, priceHistory: history };
+  }
+  
+  function showStockDetails(ticker) {
+    const data = generateDummyStockData(ticker);
+    document.getElementById('stockDetailsTitle').innerText = `${ticker} Details`;
+    document.getElementById('stockOpen').innerText = `$${data.open}`;
+    document.getElementById('stockClose').innerText = `$${data.close}`;
+    document.getElementById('stockHigh').innerText = `$${data.high}`;
+    document.getElementById('stockLow').innerText = `$${data.low}`;
+  
+    const overlay = document.getElementById('stockDetailsOverlay');
+    const popup = document.getElementById('stockDetailsPopup');
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+  
+    if (stockPriceCharts[ticker]) {
+      stockPriceCharts[ticker].destroy();
+    }
+  
+    const options = {
+      chart: { type: 'line', height: 200 },
+      series: [{ name: 'Price', data: data.priceHistory.map(p => p.price) }],
+      xaxis: { categories: data.priceHistory.map(p => p.time) },
+      title: { text: 'Price History (Last 10 Updates)', align: 'center' },
+      stroke: { curve: 'smooth' },
+      colors: ['#007bff'],
+      tooltip: { y: { formatter: val => `$${val}` } }
+    };
+  
+    stockPriceCharts[ticker] = new ApexCharts(document.querySelector("#stockPriceChart"), options);
+    stockPriceCharts[ticker].render();
+  }
+  
   function renderLivePrices() {
     const container = document.getElementById("livePrices");
     container.innerHTML = "";
+  
     tickers.forEach(ticker => {
       const price = livePrices[ticker]?.toFixed(2) || "-";
       const prev = previousPrices[ticker] || price;
       const diff = price - prev;
-  
       const color = diff > 0 ? 'green' : diff < 0 ? 'red' : 'black';
       const symbol = diff > 0 ? '↑' : diff < 0 ? '↓' : '';
   
-      const div = document.createElement("div");
-      div.innerHTML = `${ticker}: <span style="color:${color}">$${price} ${symbol}</span>`;
-      container.appendChild(div);
+      const li = document.createElement("li");
+      li.className = 'live-price-item';
+      li.innerHTML = `
+        <span class="ticker">${ticker}</span>
+        <span class="price" style="color:${color};">$${price} ${symbol}</span>
+        <span class="change">${Math.abs(diff).toFixed(2)}</span>
+      `;
+      li.onclick = () => showStockDetails(ticker);
+      container.appendChild(li);
     });
   }
   
-  
-  // ==== STOCK MODAL ====
   document.getElementById('addStockBtn').addEventListener('click', () => {
-    document.getElementById('popupTitle').innerText = 'Add Stock';
+    document.getElementById('popupTitle').innerText = 'Buy Stock';
     document.getElementById('confirmStockAction').dataset.action = 'add';
     togglePopup();
   });
   
   document.getElementById('removeStockBtn').addEventListener('click', () => {
-    document.getElementById('popupTitle').innerText = 'Remove Stock';
+    document.getElementById('popupTitle').innerText = 'Sell Stock';
     document.getElementById('confirmStockAction').dataset.action = 'remove';
     togglePopup();
   });
   
   document.getElementById('closePopupBtn').addEventListener('click', togglePopup);
+  
+  document.getElementById('closeStockDetailsBtn').addEventListener('click', () => {
+    const overlay = document.getElementById('stockDetailsOverlay');
+    const popup = document.getElementById('stockDetailsPopup');
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+  });
   
   document.getElementById('confirmStockAction').addEventListener('click', () => {
     const action = document.getElementById('confirmStockAction').dataset.action;
@@ -215,25 +335,56 @@ const stockData = {
     popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
   }
   
-  
-  // ==== STATIC INVESTMENTS ====
   function addStaticInvestment() {
     const item = prompt("Enter investment or bond (e.g., 'Bond 3: $4000'):");
     if (item) {
-      investments.push(item);
+      const amountMatch = item.match(/\$(\d+)/);
+      const amount = amountMatch ? parseFloat(amountMatch[1]) : 0;
+      investments.push({ name: item, amount });
       const list = document.getElementById("investments-list");
       const li = document.createElement("li");
-      li.textContent = item;
+      li.innerHTML = `${item} <span class="delete-btn">×</span>`;
+      li.dataset.amount = amount;
+      li.onclick = function(e) {
+        if (e.target.classList.contains('delete-btn')) {
+          deleteInvestment(li);
+        }
+      };
       list.appendChild(li);
+      updateCash();
     }
   }
   
+  function deleteInvestment(element) {
+    const text = element.textContent.split(' ×')[0];
+    const index = investments.findIndex(inv => inv.name === text);
+    if (index > -1) {
+      investments.splice(index, 1);
+      element.remove();
+      updateCash();
+    }
+  }
   
-  // ==== INIT ====
+  document.addEventListener('wheel', (event) => {
+    const holdingsPage = document.getElementById('holdings');
+    const transactionsPage = document.getElementById('transactions');
+    const isHoldingsVisible = holdingsPage.style.display === 'flex';
+    const isTransactionsVisible = transactionsPage.style.display === 'flex';
+  
+    if (event.deltaY > 0) {
+      if (isHoldingsVisible) {
+        showPage('transactions');
+      }
+    } else if (event.deltaY < 0) {
+      if (isTransactionsVisible) {
+        showPage('holdings');
+      }
+    }
+  });
+  
   updateNetWorthGraph();
   updateStocksPieChart();
   updateHoldingsTable();
   updateTransactionTable();
-  fetchLivePrices();
-  setInterval(fetchLivePrices, 5000);
-  
+  generateInitialPrices();
+  setInterval(simulateLivePrices, 5000);
