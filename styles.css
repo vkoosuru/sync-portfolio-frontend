@@ -5,45 +5,45 @@ body {
     padding: 0;
     background-color: #f0f2f5;
     color: #333;
-  }
-  
-  .navbar {
+}
+
+.navbar {
     background-color: #1f2d3d;
     color: white;
     display: flex;
     justify-content: center;
     gap: 40px;
     padding: 16px;
-  }
-  
-  .navbar a {
+}
+
+.navbar a {
     color: white;
     text-decoration: none;
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
-  }
-  
-  .navbar a:hover {
+}
+
+.navbar a:hover {
     text-decoration: underline;
-  }
-  
-  .page {
+}
+
+.page {
     display: none;
     height: calc(100vh - 64px);
-  }
-  
-  .dashboard {
+}
+
+.dashboard {
     display: flex;
     flex-direction: row;
     padding: 20px;
     gap: 20px;
     box-sizing: border-box;
     height: 100%;
-  }
-  
-  /* ==== COLUMNS ==== */
-  .column-left {
+}
+
+/* ==== COLUMNS ==== */
+.column-left {
     width: 33%;
     background: white;
     padding: 20px;
@@ -53,9 +53,9 @@ body {
     flex-direction: column;
     gap: 20px;
     overflow-y: auto;
-  }
-  
-  .column-right {
+}
+
+.column-right {
     width: 67%;
     background: white;
     padding: 20px;
@@ -65,36 +65,75 @@ body {
     flex-direction: column;
     gap: 30px;
     overflow-y: auto;
-  }
-  
-  /* ==== HEADERS & TEXT ==== */
-  .header {
+}
+
+/* ==== SETTLEMENT ACCOUNT BOX ==== */
+.settlement-account-box {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.settlement-btn-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.settlement-btn {
+    background-color: #6c757d;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.settlement-btn:hover {
+    background-color: #5a6268;
+}
+
+/* ==== HEADERS & TEXT ==== */
+.header {
     font-size: 22px;
     font-weight: 600;
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  #settlement-cash {
+}
+
+#settlement-cash, #cash-in-hand {
     background: #e1f5e8;
     font-size: 20px;
     padding: 15px;
     border-radius: 8px;
     text-align: center;
     font-weight: bold;
-  }
-  
-  ul#investments-list {
+}
+
+#settlement-cash.increase, #cash-in-hand.increase {
+    color: #28a745;
+}
+
+#settlement-cash.decrease, #cash-in-hand.decrease {
+    color: #dc3545;
+}
+
+ul#investments-list {
     list-style-type: none;
     padding-left: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
-  }
-  
-  ul#investments-list li {
+}
+
+ul#investments-list li {
     border: 1px solid #d0d7de;
     padding: 10px 12px;
     border-radius: 6px;
@@ -105,100 +144,100 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  ul#investments-list li:nth-child(odd) {
+}
+
+ul#investments-list li:nth-child(odd) {
     background: #f5f7fa;
-  }
-  
-  ul#investments-list li:nth-child(even) {
+}
+
+ul#investments-list li:nth-child(even) {
     background: #e6f3ff;
-  }
-  
-  ul#investments-list li:hover {
+}
+
+ul#investments-list li:hover {
     background-color: #e2e6eb;
-  }
-  
-  .delete-btn {
+}
+
+.delete-btn {
     color: #dc3545;
     font-weight: bold;
     cursor: pointer;
     padding: 0 10px;
-  }
-  
-  /* ==== GRAPHS ==== */
-  .graph-container {
+}
+
+/* ==== GRAPHS ==== */
+.graph-container {
     height: 350px;
-  }
-  
-  #stocksPieChart {
+}
+
+#stocksPieChart {
     width: 100%;
     height: 260px;
-  }
-  
-  /* ==== TRANSACTIONS ==== */
-  #transactions {
+}
+
+/* ==== TRANSACTIONS ==== */
+#transactions {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-  }
-  
-  .transactions-container {
+}
+
+.transactions-container {
     width: 80vw;
     max-width: 1200px;
-  }
-  
-  #transactionTable {
+}
+
+#transactionTable {
     width: 100%;
     margin: 0 auto;
-  }
-  
-  /* ==== TABLES ==== */
-  table {
+}
+
+/* ==== TABLES ==== */
+table {
     border-collapse: separate;
     border-spacing: 0 10px;
     font-size: 15px;
     background: #ffffff;
     border-radius: 8px;
-  }
-  
-  th, td {
+}
+
+th, td {
     padding: 12px;
     text-align: center;
-  }
-  
-  th {
+}
+
+th {
     background: #f8f9fa;
     font-weight: 600;
-  }
-  
-  tr.buy-row {
+}
+
+tr.buy-row {
     background-color: #e1f5e8;
     border-radius: 8px;
     margin: 10px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  tr.sell-row {
+}
+
+tr.sell-row {
     background-color: #ffe6e6;
     border-radius: 8px;
     margin: 10px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  tr.buy-row:hover, tr.sell-row:hover {
+}
+
+tr.buy-row:hover, tr.sell-row:hover {
     background-color: #f1f1f1;
-  }
-  
-  /* ==== LIVE PRICES ==== */
-  .live-prices {
+}
+
+/* ==== LIVE PRICES ==== */
+.live-prices {
     display: flex;
     flex-direction: column;
     gap: 15px;
-  }
-  
-  .live-price-item {
+}
+
+.live-price-item {
     background: #ffffff;
     padding: 15px;
     border-radius: 8px;
@@ -207,29 +246,29 @@ body {
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-  }
-  
-  .live-price-item:hover {
+}
+
+.live-price-item:hover {
     background: #f8f9fa;
-  }
-  
-  .ticker {
+}
+
+.ticker {
     font-weight: 600;
-  }
-  
-  .price {
+}
+
+.price {
     font-weight: 500;
-  }
-  
-  .change {
+}
+
+.change {
     background: #f5f7fa;
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 14px;
-  }
-  
-  /* ==== POPUPS & MODALS ==== */
-  .overlay {
+}
+
+/* ==== POPUPS & MODALS ==== */
+.overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -238,9 +277,9 @@ body {
     background: rgba(0, 0, 0, 0.6);
     z-index: 999;
     display: none;
-  }
-  
-  .popup {
+}
+
+.popup {
     display: none;
     position: fixed;
     top: 50%;
@@ -252,37 +291,37 @@ body {
     z-index: 1000;
     width: 320px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  }
-  
-  .stock-details-popup {
+}
+
+.stock-details-popup {
     width: 500px;
     max-width: 90vw;
-  }
-  
-  .popup h2 {
+}
+
+.popup h2 {
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  .popup form {
+}
+
+.popup form {
     display: flex;
     flex-direction: column;
-  }
-  
-  .popup label {
+}
+
+.popup label {
     margin-bottom: 5px;
-  }
-  
-  .popup select,
-  .popup input {
+}
+
+.popup select,
+.popup input {
     padding: 10px;
     margin-bottom: 15px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 6px;
-  }
-  
-  .popup button {
+}
+
+.popup button {
     padding: 10px;
     background-color: #28a745;
     color: white;
@@ -291,53 +330,53 @@ body {
     font-size: 16px;
     border-radius: 6px;
     margin-top: 10px;
-  }
-  
-  .popup button:hover {
+}
+
+.popup button:hover {
     background-color: #218838;
-  }
-  
-  #closePopupBtn, #closeStockDetailsBtn {
+}
+
+#closePopupBtn, #closeStockDetailsBtn {
     background-color: #dc3545;
-  }
-  
-  #closePopupBtn:hover, #closeStockDetailsBtn:hover {
+}
+
+#closePopupBtn:hover, #closeStockDetailsBtn:hover {
     background-color: #c82333;
-  }
-  
-  .stock-metrics {
+}
+
+.stock-metrics {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-bottom: 20px;
-  }
-  
-  .stock-chart {
+}
+
+.stock-chart {
     height: 200px;
-  }
-  
-  .open-price {
+}
+
+.open-price {
     color: #007bff;
     font-weight: 500;
-  }
-  
-  .close-price {
+}
+
+.close-price {
     color: #6f42c1;
     font-weight: 500;
-  }
-  
-  .high-price {
+}
+
+.high-price {
     color: #28a745;
     font-weight: 500;
-  }
-  
-  .low-price {
+}
+
+.low-price {
     color: #dc3545;
     font-weight: 500;
-  }
-  
-  /* ==== BUTTONS ==== */
-  .btn-container {
+}
+
+/* ==== BUTTONS ==== */
+.btn-container {
     position: fixed;
     bottom: 20px;
     left: 50%;
@@ -345,9 +384,9 @@ body {
     z-index: 1001;
     display: flex;
     gap: 20px;
-  }
-  
-  .btn {
+}
+
+.btn {
     background-color: #007bff;
     color: white;
     padding: 10px 20px;
@@ -355,28 +394,28 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
-  }
-  
-  .btn:hover {
+}
+
+.btn:hover {
     background-color: #0056b3;
-  }
-  
-  .btn-small {
+}
+
+.btn-small {
     padding: 5px 10px;
     font-size: 14px;
-  }
-  
-  /* ==== RESPONSIVE ==== */
-  @media (max-width: 900px) {
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 900px) {
     .dashboard {
-      flex-direction: column;
-      height: auto;
+        flex-direction: column;
+        height: auto;
     }
     .column-left,
     .column-right {
-      width: 100%;
+        width: 100%;
     }
     .transactions-container {
-      width: 90vw;
+        width: 90vw;
     }
-  }
+}
