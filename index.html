@@ -14,30 +14,37 @@
     <a onclick="showPage('transactions')">Transactions</a>
   </div>
 
-  <div id="home" class="page dashboard">
+  <div id="home" class="page dashboard" style="display: flex;">
     <div class="column-left">
-      <div class="header">Settlement Account Cash</div>
-      <div id="settlement-cash">$10,500</div>
+      <div class="settlement-account-box">
+        <div class="header">Settlement Account</div>
+        <div id="cash-in-hand" class="cash-amount">$5,000</div>
+        <div class="settlement-btn-container">
+          <button class="settlement-btn" onclick="addCash()">Add Cash</button>
+          <button class="settlement-btn" onclick="removeCash()">Remove Cash</button>
+        </div>
+      </div>
+      
+      <div class="header">Cashflow</div>
+      <div id="settlement-cash" class="cash-amount">$10,500</div>
       
       <div class="header">
         Bonds & Investments
-        <button onclick="addStaticInvestment()" class="btn btn-small">+</button>
+        <span class="btn btn-small" onclick="addStaticInvestment()">+</span>
       </div>
       <ul id="investments-list">
-        <li onclick="deleteInvestment(this)" data-amount="5000">Bond 1: $5000 <span class="delete-btn">×</span></li>
-        <li onclick="deleteInvestment(this)" data-amount="3000">Bond 2: $3000 <span class="delete-btn">×</span></li>
-        <li onclick="deleteInvestment(this)" data-amount="2000">Investment 1: $2000 <span class="delete-btn">×</span></li>
+        <li>Bond 1: $5000 <span class="delete-btn">×</span></li>
+        <li>Bond 2: $3000 <span class="delete-btn">×</span></li>
+        <li>Investment 1: $2000 <span class="delete-btn">×</span></li>
       </ul>
     </div>
-    
+
     <div class="column-right">
-      <div class="graph-container">
-        <div id="netWorthChart"></div>
-      </div>
+      <div class="header">Net Worth Over Time</div>
+      <div class="graph-container" id="netWorthChart"></div>
       
-      <div class="graph-container">
-        <div id="stocksPieChart"></div>
-      </div>
+      <div class="header">Stock Holdings Distribution</div>
+      <div id="stocksPieChart"></div>
     </div>
   </div>
 
@@ -55,10 +62,10 @@
         <tbody></tbody>
       </table>
     </div>
-    
+
     <div class="column-right">
       <div class="header">Live Stock Prices</div>
-      <div id="livePrices" class="live-prices"></div>
+      <div class="live-prices" id="livePrices"></div>
       
       <div class="btn-container">
         <button class="btn" id="addStockBtn">Buy Stock</button>
@@ -67,7 +74,7 @@
     </div>
   </div>
 
-  <div id="transactions" class="page dashboard">
+  <div id="transactions" class="page">
     <div class="transactions-container">
       <div class="header">Transaction History</div>
       <table id="transactionTable">
@@ -99,10 +106,8 @@
         <option value="FB">FB</option>
         <option value="AAPL">AAPL</option>
       </select>
-      
       <label for="stockQuantity">Quantity</label>
       <input type="number" id="stockQuantity" min="1">
-      
       <button type="button" id="confirmStockAction">Confirm</button>
       <button type="button" id="closePopupBtn">Close</button>
     </form>
@@ -111,16 +116,14 @@
   <div id="stockDetailsOverlay" class="overlay"></div>
   <div id="stockDetailsPopup" class="popup stock-details-popup">
     <h2 id="stockDetailsTitle"></h2>
-    <div id="stockDetailsContent">
-      <div class="stock-metrics">
-        <div>Open: <span id="stockOpen" class="open-price"></span></div>
-        <div>Close: <span id="stockClose" class="close-price"></span></div>
-        <div>High: <span id="stockHigh" class="high-price"></span></div>
-        <div>Low: <span id="stockLow" class="low-price"></span></div>
-      </div>
-      <div id="stockPriceChart" class="stock-chart"></div>
+    <div class="stock-metrics">
+      <div>Open: <span id="stockOpen" class="open-price"></span></div>
+      <div>Close: <span id="stockClose" class="close-price"></span></div>
+      <div>High: <span id="stockHigh" class="high-price"></span></div>
+      <div>Low: <span id="stockLow" class="low-price"></span></div>
     </div>
-    <button type="button" id="closeStockDetailsBtn">Close</button>
+    <div class="stock-chart" id="stockPriceChart"></div>
+    <button id="closeStockDetailsBtn">Close</button>
   </div>
 
   <script src="script.js"></script>
